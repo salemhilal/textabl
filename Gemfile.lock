@@ -8,9 +8,6 @@ GEM
     eventmachine (0.12.10)
     faraday (0.8.1)
       multipart-post (~> 1.1)
-    httparty (0.8.3)
-      multi_json (~> 1.0)
-      multi_xml
     httpauth (0.1)
     json (1.7.3)
     jwt (0.1.4)
@@ -19,7 +16,6 @@ GEM
       faraday (~> 0.7)
       multi_json (~> 1.3)
     multi_json (1.3.6)
-    multi_xml (0.5.1)
     multipart-post (1.1.5)
     oauth2 (0.7.1)
       faraday (~> 0.8)
@@ -50,7 +46,6 @@ PLATFORMS
 
 DEPENDENCIES
   couchdb-ruby
-  httparty
   koala
   oauth2
   shotgun
