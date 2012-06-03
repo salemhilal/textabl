@@ -1,0 +1,8 @@
+source :rubygems
+
+gem "facebooker"
+gem "sinatra"
+gem "activerecord"
+gem "activesupport"
+
+
