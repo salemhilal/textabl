@@ -4,14 +4,16 @@ require 'json'
 #class App < Sinatra::Base
 
   get "/" do
-    erb :index
+    erb :index2
   end
 
-  get "/test" do
-  	"SHIT WORKS, SON."
+  get "/landing" do
+  	erb :landing
   end
 
-
+  get "/channel" do
+  	"<script src='//connect.facebook.net/en_US/all.js'></script>"
+  end
 
   get '/auth/facebook' do
     redirect client.auth_code.authorize_url(

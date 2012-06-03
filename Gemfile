@@ -7,4 +7,4 @@ gem "httparty"
 gem "twilio-ruby"
 gem "shotgun"
 gem "koala"
-
+gem "oauth2"
