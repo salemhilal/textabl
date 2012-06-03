@@ -43,9 +43,9 @@
         });
 
         // respond to clicks on the login and logout links
-        document.getElementById('auth-loginlink').addEventListener('click', function(){
-          FB.login();
-        });
+        //document.getElementById('auth-loginlink').addEventListener('click', function(){
+        //  FB.login();
+        //});
         document.getElementById('auth-logoutlink').addEventListener('click', function(){
           FB.logout();
         }); 
@@ -57,7 +57,7 @@
           <a href="/" >Login, please.</a>
         </div>
         <div id="auth-loggedin" style="display:none">
-          Hi, <span id="auth-displayname">.</span> Shit appears to be working.  
+          Hi, <span id="auth-displayname"></span>. Shit appears to be working. Sweet.
         (<a href="#" id="auth-logoutlink">logout</a>)
       </div>
     </div>
