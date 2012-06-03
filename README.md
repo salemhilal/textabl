@@ -1,4 +1,3 @@
-hedgehog
-========
+Running the server:
 
-hedgehog...
+ruby -rubygems hi.rb
