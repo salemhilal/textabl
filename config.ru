@@ -1,3 +1,3 @@
-require 'hedgehog'
+require './hedgehog'
 
 run Sinatra::Application
