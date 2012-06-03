@@ -53,88 +53,14 @@
         document.getElementById('auth-loginlink').addEventListener('click', function(){
            FB.login(function(response) {
              // handle the response
-           }, {scope: 'email,user_events,user_status,publish_stream,create_event,user_mobile_phone'})
+           }, {scope: 'email,user_events,user_status,publish_stream,create_event'})
         });
         document.getElementById('auth-logoutlink').addEventListener('click', function(){
           FB.logout();
         }); 
       } 
-
-      //Attempts to post a passed message to the current user's status.
-      function postMessage(body){
-        FB.api('/me/feed', 'post', { message: body }, function(response) {
-          if (!response) {
-            console.error('No response received. Check the browser connection.');
-          } 
-          else if(response.error){
-            console.error('Error occured:');
-            console.error(response.error);
-          }
-          else {
-            console.log('Post ID: ' + response.id);
-          }
-        });
-      }
-
-      //Attempts to create an event with a given name and start/end time.
-      function createEvent(ename, estart, eend, resp){
-        FB.api('/me/events', 'post', { name : ename, start_time : estart, end_time : eend }, function(response) {
-          if (!response) {
-            console.error('No response received. Check the browser connection.');
-          } 
-          else if(response.error){
-            console.error('Error occured:');
-            console.error(response.error);
-          }
-          else {
-            console.log('Post ID: ' + response.id);
-            inviteUsers(response.id, resp);
-
-         //   return response.id;
-          }
-        });
-      }
-
-      //Invites the given list of users to the given event.
-      function inviteUsers(eventId, invites){
-        var postURI = '/'+eventId+'/invited/';
-        //inviteusers = '';
-        //for(id in invites){
-        //inviteusers = inviteusers + id + ", "
-        //}
-        //iu = inviteusers.substr(0, (inviteusers.length - 1));
-        console.log("Here goes...");
-        console.log(eventId);
-        console.log(invites);
-        FB.api('/'+eventId+'/invited/', 'post', {users : invites}, function(response){
-          console.log("I think I just invited some people. Here, look: ");
-          console.log(response);
-        });
-      }
-
-      //Returns a list of friends. 
-      function getFriendsList(){
-        FB.api('/me/friends', function(response){
-          console.log(response);
-        });
-      }
-
-      //Prompt the user to select a list of friends to invite.
-      function sendRequestViaMultiFriendSelector() {
-        FB.ui({method: 'apprequests',
-          message: 'Hey you guys, check out this event.'
-        }, requestCallback);
-      }
-      
-      function requestCallback(response) {
-        console.log(response.to);
-        var name = "Sicknasty Test Event Revival";
-        var start = new Date();
-        var end = new Date(); end.setDate(end.getDate() + 1); 
-        var groupID = createEvent(name, start, end, response.to);
-        //inviteUsers(groupID, response.to);
-      }
     </script>
+    <script src="js/app.js"></script>
 
     <h1>Group Text Event Planner Thing!</h1>
       <div id="auth-status">

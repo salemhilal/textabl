@@ -10,7 +10,12 @@
  
   <body data-spy="scroll" data-target=".subnav" data-offset="50">
 	 <div id="fb-root"></div>
+  <script src="js/jquery-min.js"></script>
     <script>
+		var accessToken;
+	var uid;
+    
+
       // Load the SDK Asynchronously
       (function(d){
          var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
@@ -33,14 +38,14 @@
         // listen for and handle auth.statusChange events
         FB.Event.subscribe('auth.statusChange', function(response) {
           if (response.authResponse) {
-            // user has auth'd your app and is logged into Facebook
+          /*  // user has auth'd your app and is logged into Facebook
             FB.api('/me', function(me){
               if (me.name) {
                 document.getElementById('auth-displayname').innerHTML = me.name;
               }
-            })
-            document.getElementById('auth-loggedout').style.display = 'none';
-            document.getElementById('auth-loggedin').style.display = 'block';
+            })*/
+            $('.auth-loggedout').hide();
+            $('.auth-loggedin').show();
           } else {
             // user has not auth'd your app, or is not logged into Facebook
             location.href='/';
@@ -50,6 +55,23 @@
         document.getElementById('auth-logoutlink').addEventListener('click', function(){
           FB.logout();
         }); 
+
+				FB.getLoginStatus(function(response) {
+  if (response.status === 'connected') {
+    // the user is logged in and has authenticated your
+    // app, and response.authResponse supplies
+    // the user's ID, a valid access token, a signed
+    // request, and the time the access token 
+    // and signed request each expire
+    uid = response.authResponse.userID;
+    accessToken = response.authResponse.accessToken;
+} else if (response.status === 'not_authorized') {
+    console.log("Poop");
+   location.href="/";
+  } else {
+console.log("Poop");
+    location.href="/";  }
+ });	
       } 
 
 
@@ -63,27 +85,15 @@
     return xmlHttp.responseText;
     }
 
+
+
+
 	function createEvent(name, startTime, endTime, location, description){
-		FB.getLoginStatus(function(response) {
-  if (response.status === 'connected') {
-    // the user is logged in and has authenticated your
-    // app, and response.authResponse supplies
-    // the user's ID, a valid access token, a signed
-    // request, and the time the access token 
-    // and signed request each expire
-    var uid = response.authResponse.userID;
-    var accessToken = response.authResponse.accessToken;
+	
 	var theUrl = "/eventCreate/"+accessToken+"/"+uid+"/"+name+"/"+startTime+"/"+endTime+"/"+location+"/"+description;
 	
     document.getElementById('eventCreationResponse').innerHTML= httpGet(theUrl);
-  } else if (response.status === 'not_authorized') {
-    // the user is logged in to Facebook, 
-    // but has not authenticated your app
-  } else {
-    // the user isn't logged in to Facebook.
-  }
- });	
-
+  
 }
 	
  
@@ -116,7 +126,7 @@ var hrs = parseInt(timeStrs[0]) % 12 + (timeStrs2[1] == 'AM') ? 0 : 12;
 
     </script>
 
-
+<div class="auth-loggedin" style="display:none">
  <!-- Navbar
     ================================================== -->
     <div class="navbar navbar-fixed-top">
@@ -155,7 +165,7 @@ var hrs = parseInt(timeStrs[0]) % 12 + (timeStrs2[1] == 'AM') ? 0 : 12;
   <label>Event Name:</label>  
   <input type="text" class="span3" placeholder="My event…"/>  
 <label>Description:</label>  
-  <textarea class="input span3" placeholder="Event description..." id="textarea" maxlength="160" rows="3"></textarea>  
+  <textarea class="input span3" placeholder="Event description..." id="textarea" maxlength="160" rows="5"></textarea>  
             
 	<label>Where:</label>  
   <input type="text" class="span3" placeholder="Location..."/>  
@@ -177,16 +187,12 @@ var hrs = parseInt(timeStrs[0]) % 12 + (timeStrs2[1] == 'AM') ? 0 : 12;
 </form> 
 
 <div id="auth-status">
-        <div id="auth-loggedout">
-          <a href="/" >Login, please.</a>
+        <div class="auth-loggedout">
+          <a href="/" >You Should never see this</a>
         </div>
-        <!--<div id="auth-loggedin" style="display:none">
-          Hi, <span id="auth-displayname">.</span> Shit appears to be working.
-
-			<span id='createEvent'>Click to make event</span>  
-			<span id='eventCreationResponse'></span>
+        <div class="auth-loggedin" style="display:none">
         (<a href="#" id="auth-logoutlink">logout</a>)
-      </div> -->
+      </div>
     </div>
 
 
@@ -197,11 +203,11 @@ var hrs = parseInt(timeStrs[0]) % 12 + (timeStrs2[1] == 'AM') ? 0 : 12;
 
     </div><!-- /container -->
 
-
+</div>
 
 
 <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-  <script src="js/jquery-min.js"></script>
+
     <script src="js/bootstrap-datepicker.js"></script>
  	<script src="js/bootstrap-timepicker.js"></script>
     <script src="js/bootstrap.js"></script>
