@@ -52,7 +52,11 @@ helpers do
 end
 
 get '/' do
-	"<h1>Welcome to project Hedgehog.</h1>"
+	erb :index
+end
+
+get '/landing' do
+	"You've landed!"
 end
 
 get '/hi' do
