@@ -7,3 +7,11 @@ task :poll_twilio do
 	# need to hit db to find out event members
 	#twilio_broadcast_queue!(twilio_auth!,event_members = {})
 end
+
+desc "Clean all sms messages on twilio"
+task :clean_msgs do
+	client = twilio_auth!
+	client.account.sms.messages.list.each do |sms|
+		# hit db and save the sms.sid so we don't broadcast it anymore
+	end
+end
