@@ -1,7 +1,10 @@
 require 'sinatra'
 require 'twilio-ruby'
 require 'json'
-require 'pry'
+
+use Rack::Auth::Basic, "Restricted Area" do |username, password|
+  [username, password] == ['fullhouse', 'tanners']
+end
 
 # twilio vars
 @@sent_msgs    = []
@@ -18,8 +21,3 @@ end
 get '/' do
 	erb :index
 end
-
-get '/twilio_create_group/:name/:owner_name' do |name,owner_name|
-	twilio_create_group(name,owner_name,@@event_members)
-end
-
