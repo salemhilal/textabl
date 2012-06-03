@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Facebook Client-side Authentication Example</title>
+    <title>Group Text Event Planner Thing!</title>
   </head>
   <body>
     <div id="fb-root"></div>
@@ -37,15 +37,8 @@
                   }
                 });
             var body = "If this works, be super proud of me.";
-            /*FB.api('/me/events', 'post', { name : 'Sicknasty Test Event', start_time : new Date().toUTCString(), end_time : new Date("Sun Jun 04 2012 10:27:57 GMT-0700").toUTCString() }, function(response) {
-              if (!response || response.error) {
-                alert('Error occured. Check them logs.');
-                console.error(response.error);
-              } else {
-                alert('Post ID: ' + response.id);
-              }
-             });*/
             console.log(body);
+            getFriendsList();
             document.getElementById('auth-loggedout').style.display = 'none';
             document.getElementById('auth-loggedin','auth-poststatus').style.display = 'block';
             //location.href='/landing';
@@ -60,28 +53,90 @@
         document.getElementById('auth-loginlink').addEventListener('click', function(){
            FB.login(function(response) {
              // handle the response
-           }, {scope: 'email,user_events,user_status,publish_stream,create_event'})
+           }, {scope: 'email,user_events,user_status,publish_stream,create_event,user_mobile_phone'})
         });
         document.getElementById('auth-logoutlink').addEventListener('click', function(){
           FB.logout();
         }); 
       } 
 
-
+      //Attempts to post a passed message to the current user's status.
       function postMessage(body){
         FB.api('/me/feed', 'post', { message: body }, function(response) {
-          if (!response || response.error) {
-            alert('Error occured');
-          } else {
-            alert('Post ID: ' + response.id);
+          if (!response) {
+            console.error('No response received. Check the browser connection.');
+          } 
+          else if(response.error){
+            console.error('Error occured:');
+            console.error(response.error);
+          }
+          else {
+            console.log('Post ID: ' + response.id);
           }
         });
       }
+
+      //Attempts to create an event with a given name and start/end time.
+      function createEvent(ename, estart, eend, resp){
+        FB.api('/me/events', 'post', { name : ename, start_time : estart, end_time : eend }, function(response) {
+          if (!response) {
+            console.error('No response received. Check the browser connection.');
+          } 
+          else if(response.error){
+            console.error('Error occured:');
+            console.error(response.error);
+          }
+          else {
+            console.log('Post ID: ' + response.id);
+            inviteUsers(response.id, resp);
+
+         //   return response.id;
+          }
+        });
+      }
+
+      //Invites the given list of users to the given event.
+      function inviteUsers(eventId, invites){
+        var postURI = '/'+eventId+'/invited/';
+        //inviteusers = '';
+        //for(id in invites){
+        //inviteusers = inviteusers + id + ", "
+        //}
+        //iu = inviteusers.substr(0, (inviteusers.length - 1));
+        console.log("Here goes...");
+        console.log(eventId);
+        console.log(invites);
+        FB.api('/'+eventId+'/invited/', 'post', {users : invites}, function(response){
+          console.log("I think I just invited some people. Here, look: ");
+          console.log(response);
+        });
+      }
+
+      //Returns a list of friends. 
+      function getFriendsList(){
+        FB.api('/me/friends', function(response){
+          console.log(response);
+        });
+      }
+
+      //Prompt the user to select a list of friends to invite.
+      function sendRequestViaMultiFriendSelector() {
+        FB.ui({method: 'apprequests',
+          message: 'Hey you guys, check out this event.'
+        }, requestCallback);
+      }
       
+      function requestCallback(response) {
+        console.log(response.to);
+        var name = "Sicknasty Test Event Revival";
+        var start = new Date();
+        var end = new Date(); end.setDate(end.getDate() + 1); 
+        var groupID = createEvent(name, start, end, response.to);
+        //inviteUsers(groupID, response.to);
+      }
     </script>
 
-
-    <h1>Facebook Client-side Authentication Example</h1>
+    <h1>Group Text Event Planner Thing!</h1>
       <div id="auth-status">
         <div id="auth-loggedout">
           <a href="#" id="auth-loginlink">Login</a>
@@ -89,15 +144,29 @@
         <div id="auth-loggedin" style="display:none">
           Hi, <span id="auth-displayname"></span>  
         (<a href="#" id="auth-logoutlink">logout</a>).<br />
-          <a href="#" id="auth-poststatus">Click here to test-post a status.</a>
+          <!--a href="#" id="auth-poststatus">Click here to test-post a status.</a-->
+          <a href="#" id="auth-letsgo">Click here to start a TextRaid event.</a>
+          <p>
+          <!--input type="button"
+            onclick="sendRequestViaMultiFriendSelector(); return false;"
+            value="Send Request to Many Users with MFS"
+          /-->
+          </p>
         </div>
 
       </div>
     </div>
   <script>
-      document.getElementById('auth-poststatus').addEventListener('click', function(){
-        postMessage("Hey there. If you see this, be super proud of me.");
+    //Link click eventListeners.
+      //Sends a test post.
+      //document.getElementById('auth-poststatus').addEventListener('click', function(){
+      //  postMessage("Hey there. If you see this, be super proud of me.");
+      //});
+      document.getElementById('auth-letsgo').addEventListener('click', function(){
+        //postMessage("I just created a TextRaid group event. Get excited.");
+        var invitedUIDs = sendRequestViaMultiFriendSelector();
       });
+
   </script>
   </body>
 </html>
