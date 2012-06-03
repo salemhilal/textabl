@@ -2,6 +2,7 @@ require 'twilio-ruby'
 require './hedgehog'
 
 module TwilioHelpers
+end
 	ACCOUNT_SID  = 'ACc1c98dc028b74b878a1e9a7d0d12c403'
 	AUTH_TOKEN   = 'b7017ad9152b15a4fbcf234aacfde882'
 	
@@ -57,4 +58,3 @@ module TwilioHelpers
 			end
                 end
         end
-end

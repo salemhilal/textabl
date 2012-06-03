@@ -7,6 +7,7 @@ require 'dm-aggregates'
 require 'dm-constraints'
 require 'uri'
 require 'net/http'
+require './domain/eventsys'
 
 use Rack::Auth::Basic, "Restricted Area" do |username, password|
   [username, password] == ['fullhouse', 'tanners']
@@ -16,7 +17,8 @@ end
 @@sent_msgs    = []
 @@event_members = {
 	'Chris Cacciatore' => {:phone => '+19165954787'},
-	'Salem Lastname'   => {:phone => '+14125677589'}
+	'Salem Lastname'   => {:phone => '+14125677589'},
+	'John Brieger'     => {:phone => '+19167088467'}
 }
 
 configure do
@@ -43,8 +45,11 @@ get "/landing" do
         erb :landing
 end
 
-post '/create_event/:id' do |id|
-	
+get '/create_event' do
+	repo = HostRepository.new
+	host = repo.getByEmail('salemhilal@gmail.com')
+	Event.new(host, params[:name], '', DateTime.now).save
+	twilio_create_group(params[:name],host.name,@@event_members)	
 end
 
 get "/channel" do
