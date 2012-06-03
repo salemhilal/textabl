@@ -43,6 +43,10 @@ get "/landing" do
         erb :landing
 end
 
+post '/create_event/:id' do |id|
+	
+end
+
 get "/channel" do
         "<script src='//connect.facebook.net/en_US/all.js'></script>"
 end
