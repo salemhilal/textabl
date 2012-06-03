@@ -155,7 +155,7 @@ var hrs = parseInt(timeStrs[0]) % 12 + (timeStrs2[1] == 'AM') ? 0 : 12;
   <label>Event Name:</label>  
   <input type="text" class="span3" placeholder="My event…"/>  
 <label>Description:</label>  
-  <textarea class="input span3" placeholder="Event description..." id="textarea" maxlength="160" rows="3"></textarea>  
+  <textarea class="input span3" placeholder="Event description..." id="textarea" maxlength="160" rows="5"></textarea>  
             
 	<label>Where:</label>  
   <input type="text" class="span3" placeholder="Location..."/>  
@@ -180,13 +180,13 @@ var hrs = parseInt(timeStrs[0]) % 12 + (timeStrs2[1] == 'AM') ? 0 : 12;
         <div id="auth-loggedout">
           <a href="/" >Login, please.</a>
         </div>
-        <!--<div id="auth-loggedin" style="display:none">
+        <div id="auth-loggedin" style="display:none">
           Hi, <span id="auth-displayname">.</span> Shit appears to be working.
 
 			<span id='createEvent'>Click to make event</span>  
 			<span id='eventCreationResponse'></span>
         (<a href="#" id="auth-logoutlink">logout</a>)
-      </div> -->
+      </div>
     </div>
 
 

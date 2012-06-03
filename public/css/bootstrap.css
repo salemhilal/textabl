@@ -50,6 +50,7 @@ a:active {
   outline: 0;
 }
 
+
 sub,
 sup {
   position: relative;
@@ -72,6 +73,9 @@ img {
   border: 0;
   -ms-interpolation-mode: bicubic;
 }
+.center_it img, button { 
+	display: block; margin-left: auto; margin-right: auto
+	 }
 
 #map_canvas img {
   max-width: none;
