@@ -7,7 +7,7 @@ gem "twilio-ruby"
 gem "shotgun"
 gem "koala"
 gem "oauth2"
-gem "datamapper"
+gem "datamapper", "1.2.0"
 
 #group :production do
 #	gem 'dm-postgres-adapter'

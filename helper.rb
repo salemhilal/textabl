@@ -45,8 +45,7 @@ module TwilioHelpers
                 client.account.sms.messages.list.each do |sms|
 			# only look at messages that twilio has recieved
 			if sms.direction == 'inbound'
-				puts "got one"
-                        	if TextMessages.count(sms.sid) == 0
+                        	if TextMessages.count(:sms_id => sms.sid) == 0
                                 	# spam it to others
                                 	members.each do |name,info|
                                         	if info[:phone] != sms.from

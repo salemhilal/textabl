@@ -1,7 +1,10 @@
 require 'sinatra'
 require 'twilio-ruby'
 require 'json'
-require 'data_mapper'
+require 'dm-core'
+require 'dm-migrations'
+require 'dm-aggregates'
+require 'dm-constraints'
 
 use Rack::Auth::Basic, "Restricted Area" do |username, password|
   [username, password] == ['fullhouse', 'tanners']
@@ -37,7 +40,6 @@ end
 
 helpers do
 	require settings.root + '/helper'
-	include TwilioHelpers
 end
 
 get '/' do
