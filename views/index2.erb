@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Facebook Client-side Authentication Example</title>
+    <title>Group Text Event Planner Thing!</title>
   </head>
   <body>
     <div id="fb-root"></div>
@@ -122,7 +122,7 @@
       //Prompt the user to select a list of friends to invite.
       function sendRequestViaMultiFriendSelector() {
         FB.ui({method: 'apprequests',
-          message: 'My Great Request'
+          message: 'Hey you guys, check out this event.'
         }, requestCallback);
       }
       
@@ -136,7 +136,7 @@
       }
     </script>
 
-    <h1>Facebook Client-side Authentication Example</h1>
+    <h1>Group Text Event Planner Thing!</h1>
       <div id="auth-status">
         <div id="auth-loggedout">
           <a href="#" id="auth-loginlink">Login</a>
@@ -144,13 +144,13 @@
         <div id="auth-loggedin" style="display:none">
           Hi, <span id="auth-displayname"></span>  
         (<a href="#" id="auth-logoutlink">logout</a>).<br />
-          <a href="#" id="auth-poststatus">Click here to test-post a status.</a>
-          <a href="#" id="auth-letsgo">Click here to start a TextVite event.</a>
+          <!--a href="#" id="auth-poststatus">Click here to test-post a status.</a-->
+          <a href="#" id="auth-letsgo">Click here to start a TextRaid event.</a>
           <p>
-          <input type="button"
+          <!--input type="button"
             onclick="sendRequestViaMultiFriendSelector(); return false;"
             value="Send Request to Many Users with MFS"
-          />
+          /-->
           </p>
         </div>
 
@@ -159,14 +159,11 @@
   <script>
     //Link click eventListeners.
       //Sends a test post.
-      document.getElementById('auth-poststatus').addEventListener('click', function(){
-        postMessage("Hey there. If you see this, be super proud of me.");
-      });
+      //document.getElementById('auth-poststatus').addEventListener('click', function(){
+      //  postMessage("Hey there. If you see this, be super proud of me.");
+      //});
       document.getElementById('auth-letsgo').addEventListener('click', function(){
-        //postMessage("I just created a TextVite group event. Get excited.");
-
-        //TODO: add datepicker hooks to grab relevant information.   
-
+        //postMessage("I just created a TextRaid group event. Get excited.");
         var invitedUIDs = sendRequestViaMultiFriendSelector();
       });
 
