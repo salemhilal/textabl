@@ -18,16 +18,22 @@ class SimpleRubyFacebookExample < Sinatra::Application
 
 	get '/' do
 		if session['access_token']
-		  'You are logged in! <a href="/logout">Logout</a>'
+		    'You are logged in! <a href="/logout">Logout</a>'
+		 	puts session['access_token']
+		 	@graph = Koala::Facebook::GraphAPI.new(session['access_token'])
+		  	#profile = @graph.get_object("me")
+			#friends = @graph.get_connections("me", "friends")
+			#@graph.put_connections("me", "feed", :message => "I am writing on my wall!")
 			# do some stuff with facebook here
 			# for example:
-			# puts Koala::Facebook::GraphAPI.new(session["access_token"])
+			# @graph =  Koala::Facebook::GraphAPI.new(session["access_token"])
 			# publish to your wall (if you have the permissions)
 			# @graph.put_wall_post("I'm posting from my new cool app!")
 			# or publish to someone else (if you have the permissions too ;) )
 			# @graph.put_wall_post("Checkout my new cool app!", {}, "someoneelse's id")
 		else
-			'<a href="/login">Login</a>'
+			'<div class="fb-login-button">Login with Facebook</div>'
+			#'<a href="/login">Login</a>'
 		end
 	end
 

@@ -1,37 +1,44 @@
 <html>
-	<head>
-		<title>Project Hedgehog</title>
-		
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <head>
+      <title>My Facebook Login Page</title>
+    </head>
+    <body>
+      <div id="fb-root"></div>
+      <script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            appId      : '467356809944508',
+            status     : true, 
+            cookie     : true,
+            xfbml      : true,
+            oauth      : true,
+          });
 
-		<!-- Facebook Multi-Friend Selector -->
-		<script src="jquery.facebook.multifriend.select.js"></script>
-		<link rel="stylesheet" href="jquery.facebook.multifriend.select.css" />
-		<script src="http://connect.facebook.net/en_US/all.js"></script>
+          FB.ui({ method: 'feed', 
+              message: 'Facebook for Websites is super-cool'});
 
-		<link rel="stylesheet" href="/css/bootstrap.min.css" >
-	</head>
-	<body>
-      	<div id="fb-root"></div>
-      	<script>
-	        window.fbAsyncInit = function() {
-	          FB.init({
-	            appId      : '467356809944508',
-	            status     : true, 
-	            cookie     : true,
-	            xfbml      : true,
-	            oauth      : true,
-	          });
-	        };
-	        (function(d){
-	           var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
-	           js = d.createElement('script'); js.id = id; js.async = true;
-	           js.src = "//connect.facebook.net/en_US/all.js";
-	           d.getElementsByTagName('head')[0].appendChild(js);
-	         }(document));
-      	</script>
-		<div class="fb-login-button">Login with Facebook</div>
-	<script src="/js/bootstrap.js"></script>
+          FB.api('/me', function(user) {
+            if (user) {
+              var image = document.getElementById('image');
+              image.src = 'https://graph.facebook.com/' + user.id + '/picture';
+              var name = document.getElementById('name');
+              name.innerHTML = user.name
+            }
+          });
+        };
+
+        (function(d){
+           var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+           js = d.createElement('script'); js.id = id; js.async = true;
+           js.src = "//connect.facebook.net/en_US/all.js";
+           d.getElementsByTagName('head')[0].appendChild(js);
+         }(document));
+      </script>
+
+      <div align="center">
+        <img id="image"/>
+        <div id="name"></div>
+      </div>
+      <div class="fb-login-button" scope="create_event,user_events,email" data-redirect-uri="/test"><a href="/test">Login with Facebook</a></div>
     </body>
-</html>
-
+ </html>
