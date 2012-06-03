@@ -1,104 +1,45 @@
 require 'sinatra'
-require 'httparty'
 require 'twilio-ruby'
 require 'json'
+require 'data_mapper'
 
-# groupme vars
-@@access_token = ''
-@@user_id      = ''
+use Rack::Auth::Basic, "Restricted Area" do |username, password|
+  [username, password] == ['fullhouse', 'tanners']
+end
 
 # twilio vars
-@@account_sid  = 'ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-@@auth_token   = 'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy'
-@@twilio_phone = '1234567890'
 @@sent_msgs    = []
-@@event_members = {} 
+@@event_members = {
+	'Chris Cacciatore' => {:phone => '+19165954787'},
+	'Salem Lastname'   => {:phone => '+14125677589'}
+}
+
+configure do
+	DataMapper.setup(:default, ENV['DATABASE_URL'] || "sqlite3:///#{Dir.pwd}/db/test.db")
+	
+	class TextMessages
+		include DataMapper::Resource
+	
+		property :id, Serial
+		property :sms_id, String, :required => true, :length => 256,:key => true
+	end
+  	DataMapper.auto_upgrade!
+
+	# seed spent messages (hack due to twilio limitations)
+	#TextMessages.create(:sms_id => 'SMa88581010cae4364902855a27f4e0e9d')
+	#TextMessages.create(:sms_id => 'SM88865edda98e4f7fbf1c7bfbfd28b6c3')
+	#TextMessages.create(:sms_id => 'SM030bdd38127b4f61af28c7a13f5fc070')
+	#TextMessages.create(:sms_id => 'SM36525a7bd81b4ea48bcddeef11dc7a95')
+	#TextMessages.create(:sms_id => 'SMf982eb02a7fb48559d2dda5435fa733f')
+	#TextMessages.create(:sms_id => 'SM0daccfe316e4476ab1bb51ff30894a4f')
+	#TextMessages.create(:sms_id => 'SM0c00cace97f04834bc18d613ef993cb5')
+end
 
 helpers do
-	def twilio_auth!
-		Twilio::REST::Client.new account_sid, auth_token
-	end
-	def twilio_send_text_message!(client,phone_num,msg)
-		client.account.sms.messages.create(
-  			:from => @@twilio_phone,
-  			:to => phone_num,
-  			:body => msg)
-	end
-	def twilio_broadcast_queue(client)
-		client.account.sms.messages.each do |sms|
-  			if not @@sent_msgs.include?(sms.sid)
-				# spam it to others
-				@@event_members.reject{|name,info| info['phone_num'] == sms.from}.each do |name,info|
-					client.account.sms.message.create(
-						:from => @@twilio_phone,
-						:to => info['phone_num'],
-						:body => sms.body)
-				end
-			end
-		end
-	end
-
-	class Member
-		attr_accessor :name
-		attr_accessor :phone_num
-		def initialize(name,phone_num)
-			@name = name
-			@phone_num = phone_num
-		end
-	end
-        class GroupRequest
-		attr_accessor :topic
-		attr_accessor :memberships
-		def initialize(topic,a)
-			@topic = topic
-			@memberships = []
-			a.each do |m|
-				@memberships << Member.new(m[:name],m[:phone_num])
-			end
-		end
-	end
-	def groupme_auth!
-		options = {:client_id     => 'idgoeshere',
-			   :client_secret => 'secretgoeshere',
-			   :device_id     => 'babygoeshere',
-			   :phone_number  => 'callme',
-			   :grant_type	  => 'client_credentials'}
-		response = HTTParty.post("https://api.groupme.com/clients/tokens",options)
-		puts response
-		if response.code == 404
-			return false
-		else
-			@@access_token = response['access_token']
-			@@user_id      = response['user_id']
-			return true	
-		end
-	end
-
-	def groupme_create_group(name,members)
-		options = {:client_id     => 'idgoeshere',
-			   :client_secret => 'secretgoeshere',
-			   :token         => @@access_token}
-		group_request = GroupRequest.new(name,members)
-		HTTParty.post("https://api.groupme.com/clients/groups",:options => options, :body => group_request.to_json)
-	end
+	require settings.root + '/helper'
+	include TwilioHelpers
 end
 
 get '/' do
 	erb :index
-end
-
-get '/landing' do
-	"You've landed!"
-end
-
-get '/hi' do
-	"Hello World!"
-end
-
-get '/groupme_auth' do
-	groupme_auth!().to_s
-end
-
-get '/groupme_create_group' do
-	groupme_create_group('test',[{:name => 'Chris', :phone_num => '(123) 456-7899'}]).to_s
 end
