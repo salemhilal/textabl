@@ -6,26 +6,21 @@ class Db
 		@user = 'dbuser'
 		@pass = 'h3dg3h0g'
 		@dbname = 'socialtext'
+		@con = Mysql.new(@host, @user, @pass, @dbname)		
 	end
 	def getData(sql)
-		con = Mysql.new(@host, @user, @pass, @dbname)
-		rs = con.query(sql)
-		con.close
+		rs = @con.query(sql)
 		@getData = rs		
 	end
 
-	def executeSQL(sql)
-		con = Mysql.new(@host, @user, @pass, @dbname)
-		rs = con.query(sql)
-		con.close
+	def executeSQL(sql)	
+		rs = @con.query(sql)
 	end
 
 	def getInsertID
-		con = Mysql.new(@host, @user, @pass, @dbname)		
-		rs = con.query("SELECT last_insert_id()")
+		rs = @con.query("SELECT last_insert_id()")
 		h = rs.fetch_hash
-		@getInsertID = ['last_insert_id()']
-		con.close
+		@getInsertID = h['last_insert_id()']
 	end
 end
 
@@ -72,7 +67,7 @@ class AttendeeRepository
 		db = Db.new
 		rs = db.getData("SELECT * FROM users WHERE email = '#{email}' LIMIT 1")
 		h = rs.fetch_hash
-		user = Host.new(h['name'], h['email'], h['date_registered'], h['cell'], h['facebook_id'])
+		user = Attendee.new(h['name'], h['email'], h['date_registered'], h['cell'], h['facebook_id'])
 		user.id = h['id']
 		@getByEmail = user
 		
@@ -106,11 +101,6 @@ class User
 		end
 		@id = db.getInsertID
 	end
-
-	#def name
-	#	@name ||= []
-	#end
-
 end
 
 class Host < User
@@ -128,6 +118,12 @@ class Host < User
 end
 
 class Attendee < User
+	def addEvent(event)
+		db = Db.new
+		db.executeSQL("INSERT INTO `users#events` (id, event_id, user_id, status) VALUES(null, '#{event.id}', '#{event.host_id}', 'Unconfirmed')")
+		@id = db.getInsertID
+	end
+
 	def acceptInvite
 	
 	end
@@ -135,19 +131,12 @@ class Attendee < User
 	def declineInvite
 	
 	end
-
-	#def initialize(event)
-	#	@event = event
-	#end
 end
 
 class Event
-	attr_accessor :id
+	attr_accessor :id, :host_id
 	def initialize(host, title, description, date)
-		#if defined? host.id == false
-			#raise "Invalid host"
-		#end
-		@host = host
+		@host_id = host.id
 		@title = title
 		@description = description
 		@date = date
@@ -155,8 +144,8 @@ class Event
 
 	def save
 		db = Db.new
-		db.executeSQL("INSERT INTO events (id, title, description, create_date, user_id) VALUES(null, '#{@title}', '#{@description}', '#{DateTime.now}', '#{@host.id}')")
-		@id = db.getInsertID		
+		db.executeSQL("INSERT INTO events (id, title, description, create_date, host_id) VALUES(null, '#{@title}', '#{@description}', '#{DateTime.now}', '#{@host_id}')")
+		@id = db.getInsertID
 	end
 end
 
@@ -164,9 +153,6 @@ class Post
 	attr_accessor :message
 
 	def initialize(user, event, message)
-		if defined? user.id
-			raise "Invalid user"
-		end
 		@user = user
 		@event = event
 		@message = message
@@ -178,3 +164,9 @@ class Post
 		@id = db.getInsertID		
 	end
 end
+#SELECT *
+#FROM `users`
+#LEFT JOIN `users#events`
+#LEFT JOIN `events`
+#ON `events`.`id` = `users#events`.`event_id`
+#ON `users`.`id` = `users#events`.`user_id`
