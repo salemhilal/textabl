@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Facebook Client-side Authentication Example</title>
+    <title>Textvite: Create, Share, Coordinate Your Way!</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="js/google-code-prettify/prettify.css" rel="stylesheet">
+
+
   </head>
-  <body>
-    <div id="fb-root"></div>
+ 
+  <body data-spy="scroll" data-target=".subnav" data-offset="50">
+	 <div id="fb-root"></div>
     <script>
       // Load the SDK Asynchronously
       (function(d){
@@ -84,7 +90,52 @@
  
     </script>
 
-      <div id="auth-status">
+
+ <!-- Navbar
+    ================================================== -->
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button"class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="./landing">Textvite</a>
+            <ul class="nav">
+              <li class="">
+                <a href="./about">About</a>
+              </li>
+              <li class="">
+                <a href="./privacy">Privacy</a>
+              </li>
+            </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+<!-- Masthead
+================================================== -->
+<header class="jumbotron subhead" id="overview">
+  <h1>Create an Event:</h1>
+  <p class="lead">Begin filling in your event information below to get started with Textvite.</p>
+</header>
+
+
+<form class="well">  
+  <label>Event Name:</label>  
+  <input type="text" class="span3" placeholder="My event…"/>  
+<label>Description:</label>  
+  <input type="text" class="span3" placeholder="Event description..."/>  
+	<label>Where:</label>  
+  <input type="text" class="span3" placeholder="My event..."/>  
+	<label></label> 
+  <button type="submit" class="btn">Next</button>  
+</form> 
+
+<div id="auth-status">
         <div id="auth-loggedout">
           <a href="/" >Login, please.</a>
         </div>
@@ -103,5 +154,35 @@ document.getElementById('createEvent').addEventListener('click', function(){
           createEvent("TestEvent", d,d,"My House", "Sweet Jams")
 });
 </script>
+
+     <!-- Footer
+      ================================================== -->
+      <footer class="footer">
+             </footer>
+
+    </div><!-- /container -->
+
+
+
+
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/google-code-prettify/prettify.js"></script>
+    <script src="js/bootstrap-transition.js"></script>
+    <script src="js/bootstrap-alert.js"></script>
+    <script src="js/bootstrap-modal.js"></script>
+    <script src="js/bootstrap-dropdown.js"></script>
+    <script src="js/bootstrap-scrollspy.js"></script>
+    <script src="js/bootstrap-tab.js"></script>
+    <script src="js/bootstrap-tooltip.js"></script>
+    <script src="js/bootstrap-popover.js"></script>
+    <script src="js/bootstrap-button.js"></script>
+    <script src="js/bootstrap-collapse.js"></script>
+    <script src="js/bootstrap-carousel.js"></script>
+    <script src="js/bootstrap-typeahead.js"></script>
+    <script src="js/application.js"></script>
+
+   
+      
   </body>
 </html>
