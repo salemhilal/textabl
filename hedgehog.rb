@@ -1,85 +1,43 @@
 require 'sinatra'
-require 'httparty'
 require 'twilio-ruby'
 require 'json'
 
-# groupme vars
-@@access_token = ''
-@@user_id      = ''
-
 # twilio vars
-@@account_sid  = 'ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-@@auth_token   = 'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy'
-@@twilio_phone = '1234567890'
+@@account_sid  = 'ACc1c98dc028b74b878a1e9a7d0d12c403'
+@@auth_token   = 'b7017ad9152b15a4fbcf234aacfde882'
+@@twilio_phone = '+1 415-599-2671'
 @@sent_msgs    = []
-@@event_members = {} 
+@@event_members = {
+	'Chris Cacciatore' => {:phone => '+19165954787'},
+	'Salem Lastname'   => {:phone => '+14125677589'}
+} 
 
 helpers do
 	def twilio_auth!
-		Twilio::REST::Client.new account_sid, auth_token
+		Twilio::REST::Client.new(@@account_sid, @@auth_token)
 	end
 	def twilio_send_text_message!(client,phone_num,msg)
+		begin
 		client.account.sms.messages.create(
   			:from => @@twilio_phone,
   			:to => phone_num,
   			:body => msg)
+		rescue Exception => e
+			puts "Problems with twilio:\n#{e}"
+		end
 	end
 	def twilio_broadcast_queue(client)
-		client.account.sms.messages.each do |sms|
+		client.account.sms.messages.list.each do |sms|
   			if not @@sent_msgs.include?(sms.sid)
 				# spam it to others
-				@@event_members.reject{|name,info| info['phone_num'] == sms.from}.each do |name,info|
-					client.account.sms.message.create(
-						:from => @@twilio_phone,
-						:to => info['phone_num'],
-						:body => sms.body)
+				@@event_members.each do |name,info|
+					if info[:phone] != sms.from
+						twilio_send_text_message!(client,info[:phone],sms.body)
+					end
 				end
+				@@sent_msgs << sms.sid
 			end
 		end
-	end
-
-	class Member
-		attr_accessor :name
-		attr_accessor :phone_num
-		def initialize(name,phone_num)
-			@name = name
-			@phone_num = phone_num
-		end
-	end
-        class GroupRequest
-		attr_accessor :topic
-		attr_accessor :memberships
-		def initialize(topic,a)
-			@topic = topic
-			@memberships = []
-			a.each do |m|
-				@memberships << Member.new(m[:name],m[:phone_num])
-			end
-		end
-	end
-	def groupme_auth!
-		options = {:client_id     => 'idgoeshere',
-			   :client_secret => 'secretgoeshere',
-			   :device_id     => 'babygoeshere',
-			   :phone_number  => 'callme',
-			   :grant_type	  => 'client_credentials'}
-		response = HTTParty.post("https://api.groupme.com/clients/tokens",options)
-		puts response
-		if response.code == 404
-			return false
-		else
-			@@access_token = response['access_token']
-			@@user_id      = response['user_id']
-			return true	
-		end
-	end
-
-	def groupme_create_group(name,members)
-		options = {:client_id     => 'idgoeshere',
-			   :client_secret => 'secretgoeshere',
-			   :token         => @@access_token}
-		group_request = GroupRequest.new(name,members)
-		HTTParty.post("https://api.groupme.com/clients/groups",:options => options, :body => group_request.to_json)
 	end
 end
 
@@ -87,18 +45,15 @@ get '/' do
 	erb :index
 end
 
-get '/landing' do
-	"You've landed!"
+get '/twilio_auth' do
+	@@twilio_client = twilio_auth!
 end
 
-get '/hi' do
-	"Hello World!"
+get '/twilio_send_text' do
+	twilio_send_text_message!(@@twilio_client,'+19165954787',"Rainbows!")
 end
 
-get '/groupme_auth' do
-	groupme_auth!().to_s
+get '/twilio_broadcast' do
+	twilio_broadcast_queue(@@twilio_client)
 end
 
-get '/groupme_create_group' do
-	groupme_create_group('test',[{:name => 'Chris', :phone_num => '(123) 456-7899'}]).to_s
-end

@@ -22,7 +22,8 @@ get '/eventMessagePost/:accessToken/:eventId/:message' do
 		'access_token' =>  params[:accessToken] ,
 		'message' =>  params[:message] 
 	}
-	Net::HTTP.post_form(URI.parse('https://graph.facebook.com/' + "#{params[:eventId]}" + "/feed"), args)
+	puts URI.parse("https://graph.facebook.com/#{params[:eventId]}/feed")
+	Net::HTTP.post_form(URI.parse("https://graph.facebook.com/#{params[:eventId]}/feed"), args)
 end
 
 
@@ -37,5 +38,5 @@ get '/eventCreate/:accessToken/:userId/:name/:startTime/:endTime/:location/:desc
 		'description' =>  params[:description] ,
 		'privacy' => 'SECRET'
 	}
-	Net::HTTP.post_form(URI.parse('https://graph.facebook.com/' +  "#{params[:userId]}"  + "/events"), args)
+	Net::HTTP.post_form(URI.parse("https://graph.facebook.com/#{params[:userId]}/events"), args)
 end
