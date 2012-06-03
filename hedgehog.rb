@@ -68,5 +68,5 @@ get '/groupme_auth' do
 end
 
 get '/groupme_create_group' do
-	groupme_create_group('test',[{:name => 'Chris', :phone_num => '(916) 595-4787'}]).to_s
+	groupme_create_group('test',[{:name => 'Chris', :phone_num => '(123) 456-7899'}]).to_s
 end
