@@ -9,9 +9,9 @@ gem "koala"
 gem "oauth2"
 gem "datamapper", "1.2.0"
 
-#group :production do
-#	gem 'dm-postgres-adapter'
-#end
+group :production do
+	gem 'dm-postgres-adapter'
+end
 
 group :test, :development do
 	gem 'dm-sqlite-adapter'
