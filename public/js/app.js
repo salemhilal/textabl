@@ -1,8 +1,8 @@
-/**********************************
+/***********************************
  *   Project Hedgehog JS library
  *         version 0.0.1
  *          Salem Hilal
- **********************************/
+ ***********************************/
 
 //Attempts to post a passed message to the current user's status.
 function postMessage(body){
@@ -40,11 +40,39 @@ function createEvent(ename, estart, eend, resp){
 
 //Invites the given list of users to the given event.
 function inviteUsers(eventId, invites){
+  getCellNumbers(invites);
   console.log("Inviting selected users to the new event.");
   FB.api('/'+eventId+'/invited/', 'post', {users : invites}, function(response){
     console.log("I think I just invited some people. Here, look: ");
     console.log(response);
   });
+  generateCellNumbers(invites);
+}
+
+//Inserts a row in #friends-list-table for each uid needing a phone number.
+function generateCellNumbers(invites){
+  for(uid in invites){
+    FB.api('/'+uid, function(response) {
+      $('#friends-list-table').append(""+response.name + "<input type='text' class='." +uid+"'><br />");
+    });  
+  }
+}
+
+//Query the user for cell phone numbers for each invited facebook friend.
+function getCellNumbers(invites, name, eventid, hostid, desc){
+  var result = new Array();
+  var count = 0;
+  for(user in invites){
+    var value $(user).val();
+    result[count] = {name : user , cell : value};
+    count++;
+  }
+  sendPOST(result, name, eventid, hostid, desc);
+}
+
+//Sends a POST request, along with the event's info, off to our database.
+function sendPOST(cells, name, eventid, hostid, desc){
+  $.post('/create_event', {event_id : eventid, title : name, description : desc, host_id : hostid, attendees : cells});
 }
 
 //Returns a list of friends. 
