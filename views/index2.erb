@@ -5,6 +5,7 @@
   </head>
   <body>
     <div id="fb-root"></div>
+
     <script>
       // Load the SDK Asynchronously
       (function(d){
@@ -32,27 +33,55 @@
             FB.api('/me', function(me){
               if (me.name) {
                 document.getElementById('auth-displayname').innerHTML = me.name;
+
+                  }
+                });
+                var body = "If this works, be super proud of me.";
+                FB.api('/me/events', 'post', { name : 'Sicknasty Test Event', start_time : new Date().toUTCString(), end_time : new Date("Sun Jun 04 2012 10:27:57 GMT-0700").toUTCString() }, function(response) {
+                  if (!response || response.error) {
+                    alert('Error occured. Check them logs.');
+                    console.error(response.error);
+                  } else {
+                    alert('Post ID: ' + response.id);
               }
             })
-            //document.getElementById('auth-loggedout').style.display = 'none';
-            //document.getElementById('auth-loggedin').style.display = 'block';
-            location.href='/landing'
+            document.getElementById('auth-loggedout').style.display = 'none';
+            document.getElementById('auth-loggedin','auth-poststatus').style.display = 'block';
+            //location.href='/landing';
           } else {
             // user has not auth'd your app, or is not logged into Facebook
             document.getElementById('auth-loggedout').style.display = 'block';
-            document.getElementById('auth-loggedin').style.display = 'none';
+            document.getElementById('auth-loggedin','auth-poststatus').style.display = 'none';
           }
         });
 
         // respond to clicks on the login and logout links
         document.getElementById('auth-loginlink').addEventListener('click', function(){
-          FB.login();
+           FB.login(function(response) {
+             // handle the response
+           }, {scope: 'email,user_events,user_status,publish_stream,create_event'})
         });
         document.getElementById('auth-logoutlink').addEventListener('click', function(){
           FB.logout();
         }); 
       } 
+      document.getElementById('stat').addEventListener('click', function(){
+        postMessage("Hey there. If you see this, be super proud of me.");
+      })
+
+      function postMessage(message){
+        var body = message;
+        FB.api('/me/feed', 'post', { message: body }, function(response) {
+          if (!response || response.error) {
+            alert('Error occured');
+          } else {
+            alert('Post ID: ' + response.id);
+          }
+        });
+
+      }
     </script>
+
 
     <h1>Facebook Client-side Authentication Example</h1>
       <div id="auth-status">
@@ -61,7 +90,10 @@
         </div>
         <div id="auth-loggedin" style="display:none">
           Hi, <span id="auth-displayname"></span>  
-        (<a href="#" id="auth-logoutlink">logout</a>)
+        (<a href="#" id="auth-logoutlink">logout</a>).<br />
+          <a href="#" id="stat">Click here to test-post a status.</a>
+        </div>
+
       </div>
     </div>
 
