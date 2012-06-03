@@ -1,11 +1,43 @@
 require 'sinatra'
 require 'httparty'
+require 'twilio-ruby'
 require 'json'
 
+# groupme vars
 @@access_token = ''
 @@user_id      = ''
 
+# twilio vars
+@@account_sid  = 'ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+@@auth_token   = 'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy'
+@@twilio_phone = '1234567890'
+@@sent_msgs    = []
+@@event_members = {} 
+
 helpers do
+	def twilio_auth!
+		Twilio::REST::Client.new account_sid, auth_token
+	end
+	def twilio_send_text_message!(client,phone_num,msg)
+		client.account.sms.messages.create(
+  			:from => @@twilio_phone,
+  			:to => phone_num,
+  			:body => msg)
+	end
+	def twilio_broadcast_queue(client)
+		client.account.sms.messages.each do |sms|
+  			if not @@sent_msgs.include?(sms.sid)
+				# spam it to others
+				@@event_members.reject{|name,info| info['phone_num'] == sms.from}.each do |name,info|
+					client.account.sms.message.create(
+						:from => @@twilio_phone,
+						:to => info['phone_num'],
+						:body => sms.body)
+				end
+			end
+		end
+	end
+
 	class Member
 		attr_accessor :name
 		attr_accessor :phone_num
