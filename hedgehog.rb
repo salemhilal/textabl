@@ -45,6 +45,13 @@ get "/landing" do
         erb :landing
 end
 
+post '/create_event' do	
+	repo = HostRepository.new
+	host = repo.getByEmail('salemhilal@gmail.com')
+	Event.new(host, params[:name], '', DateTime.now).save
+	twilio_create_group(params[:name],host.name,@@event_members)	
+end
+
 get '/create_event' do
 	repo = HostRepository.new
 	host = repo.getByEmail('salemhilal@gmail.com')
