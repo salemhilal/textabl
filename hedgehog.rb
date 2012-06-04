@@ -45,7 +45,8 @@ get "/landing" do
         erb :landing
 end
 
-post '/create_event' do	
+post '/create_event' do
+	binding.pry	
 	repo = HostRepository.new
 	host = repo.getByEmail('salemhilal@gmail.com')
 	Event.new(host, params[:name], '', DateTime.now).save
