@@ -70,9 +70,15 @@ function getCellNumbers(invites, name, eventid, hostid, desc){
   sendPOST(result, name, eventid, hostid, desc);
 }
 
-//Sends a POST request, along with the event's info, off to our database.
+//Sends a POST request, along with the event's info, off to our database.t
 function sendPOST(cells, name, eventid, hostid, desc){
-  $.post('/create_event', {event_id : eventid, title : name, description : desc, host_id : hostid, attendees : cells});
+  $.post('/create_event', 
+    {   event_id : eventid, 
+        title : name, 
+        description : desc, 
+        host_id : hostid, 
+        attendees : cells
+    });
 }
 
 //Returns a list of friends. 
