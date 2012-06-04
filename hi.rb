@@ -10,9 +10,7 @@ require 'dm-migrations'
 require 'dm-aggregates'
 require 'dm-constraints'
 require './domain/eventsys'
-use Rack::Auth::Basic, "Restricted Area" do |username, password|
-  [username, password] == ['fullhouse', 'tanners']
-end
+
 # twilio vars
 @@sent_msgs    = []
 @@event_members = {
