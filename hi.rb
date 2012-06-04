@@ -3,17 +3,16 @@ require 'oauth2'
 require 'json'
 require 'uri'
 require 'net/http'
+
 require 'twilio-ruby'
 require 'dm-core'
 require 'dm-migrations'
 require 'dm-aggregates'
 require 'dm-constraints'
 require './domain/eventsys'
-
 use Rack::Auth::Basic, "Restricted Area" do |username, password|
   [username, password] == ['fullhouse', 'tanners']
 end
-
 # twilio vars
 @@sent_msgs    = []
 @@event_members = {
@@ -36,10 +35,8 @@ end
 helpers do
 	require settings.root + '/helper'
 end
-
-
 get "/" do
-	erb :textvite
+erb :textvite
 end
 
 get "/landing" do

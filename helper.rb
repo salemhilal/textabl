@@ -1,5 +1,5 @@
 require 'twilio-ruby'
-require './hedgehog'
+require './hi'
 
 module TwilioHelpers
 end
