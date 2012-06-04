@@ -53,7 +53,7 @@ function inviteUsers(eventId, invites){
 function generateCellNumbers(invites){
   for(uid in invites){
     FB.api('/'+uid, function(response) {
-      $('#friends-list-table').append(""+response.name + "<input type='text' class='." +uid+"'><br />");
+      $('#friends-list-table').append(""+response.name + "<input style='margin-left: 10px;' type='text' class='." +uid+" span2'><br />");
     });  
   }
 }

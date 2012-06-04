@@ -165,9 +165,11 @@ var hrs = parseInt(timeStrs[0]) % 12 + (timeStrs2[1] == 'AM') ? 0 : 12;
 </span>
 </div>
 <label></label> 
- <div style="padding-top:15px; padding-bottom:15px"> <button type="button" onclick="function(){var invitedUIDs = sendRequestViaMultiFriendSelector();});" class="btn btn-primary btn-large" id="go_friend_select">Next &raquo;</button> 
+ <div style="padding-top:15px; padding-bottom:15px"> <button type="button" class="btn btn-primary btn-large" id="go_friend_select">Next &raquo;</button> 
  </div> 
-	
+	<div id="friends-list-table">
+
+</div>
 </form>
 
 <div id="auth-status">
@@ -230,6 +232,8 @@ $(document).ready(function() {
 
     
 });
+
+document.getElementById('go_friend_select').addEventListener('click', function(){var invitedUIDs = sendRequestViaMultiFriendSelector();});
 </script>
   </body>
 </html>
