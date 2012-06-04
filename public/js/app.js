@@ -63,8 +63,8 @@ function getCellNumbers(invites, name, eventid, hostid, desc){
   var result = new Array();
   var count = 0;
   for(user in invites){
-    var value $(user).val();
-    result[count] = {name : user , cell : value};
+    var val = $('.'+user).val();
+    result[count] = {name : user , cell : val};
     count++;
   }
   sendPOST(result, name, eventid, hostid, desc);
