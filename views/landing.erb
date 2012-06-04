@@ -165,7 +165,7 @@ var hrs = parseInt(timeStrs[0]) % 12 + (timeStrs2[1] == 'AM') ? 0 : 12;
 </span>
 </div>
 <label></label> 
- <div style="padding-top:15px; padding-bottom:15px"> <button type="submit" class="btn btn-primary btn-large" >Next &raquo;</button> 
+ <div style="padding-top:15px; padding-bottom:15px"> <button type="button" onclick="function(){var invitedUIDs = sendRequestViaMultiFriendSelector();});" class="btn btn-primary btn-large" id="go_friend_select">Next &raquo;</button> 
  </div> 
 	
 </form>
@@ -189,12 +189,13 @@ var hrs = parseInt(timeStrs[0]) % 12 + (timeStrs2[1] == 'AM') ? 0 : 12;
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">textvite</a>
+          <a class="brand" href="#">textabl</a>
           <div class="nav-collapse">
             <ul class="nav">
               <li class="active"><a href="#">About</a></li>
               <li><a href="#about">Terms of Use</a></li>
-              <li><a href="#contact">Privacy Policy</a></li>
+              <li><a href="/privacy">Privacy Policy</a></li>
+			  <li><a href="" id="auth-logoutlink">Logout</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -218,9 +219,6 @@ var hrs = parseInt(timeStrs[0]) % 12 + (timeStrs2[1] == 'AM') ? 0 : 12;
       <script>
 var d = new Date();
 d = d.toUTCString();
-document.getElementById('createEvent').addEventListener('click', function(){
-          createEvent("TestEvent", d,d,"My House", "Sweet Jams")
-});
 $(document).ready(function() {
   $('#dp').datepicker();
             $('.timepicker').timepicker({
@@ -232,7 +230,6 @@ $(document).ready(function() {
 
     
 });
-
 </script>
   </body>
 </html>
