@@ -2,7 +2,7 @@ Textabl
 ================================================
 #### A quick, fast way to throw events together.
 
-This was something hacked together for CerealHack's 2012 summer hackathon in Sacramento. 
+This was something hacked together for CerealHack's 2012 summer hackathon in Sacramento, for which it was awarded 3rd place.
 
 Organizing quick events/hangouts with friends is hard. Facebook events are detailed and thorough, but tend
 to be slow-moving and bad for, say, seeing a movie after work.
