@@ -1,6 +1,6 @@
 Textabl
 ================================================
-#### A quick, fast way to throw events together.
+### A quick, fast way to throw events together.
 
 This was something hacked together for CerealHack's 2012 summer hackathon in Sacramento, for which it was awarded 3rd place.
 
